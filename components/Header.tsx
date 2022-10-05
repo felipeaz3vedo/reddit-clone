@@ -1,4 +1,6 @@
 import Image from 'next/image';
+import { signIn, signOut, useSession } from 'next-auth/react';
+
 import redditLogo from '../public/reddit-logo.svg';
 import redditLoginIcon from '../public/reddit-login-icon.png';
 import { ChevronDownIcon, HomeIcon } from '@heroicons/react/24/solid';
@@ -15,6 +17,8 @@ import {
 } from '@heroicons/react/24/outline';
 
 export const Header = () => {
+  const { data: session } = useSession();
+
   return (
     <div className="sticky top-0 z-20 flex bg-white px-4 py-2 shadow-sm">
       <div className="h-10 w-20 flex-shrink-0">
@@ -59,18 +63,42 @@ export const Header = () => {
       </div>
 
       {/* SIGN IN / SIGN OUT BUTTON  */}
-      <div className="hidden cursor-pointer items-center space-x-2 border border-gray-100 p-2 lg:flex">
-        <div className="relative h-5 w-5 flex-shrink-0">
-          <Image
-            src={redditLoginIcon}
-            alt="reddit login icon"
-            objectFit="contain"
-            layout="fill"
-          />
-        </div>
+      {session ? (
+        <div
+          onClick={() => signOut()}
+          className="hidden cursor-pointer items-center space-x-2 border border-gray-100 p-2 lg:flex"
+        >
+          <div className="relative h-5 w-5 flex-shrink-0">
+            <Image
+              src={redditLoginIcon}
+              alt="reddit login icon"
+              objectFit="contain"
+              layout="fill"
+            />
+          </div>
 
-        <p className="text-gray-400">Sign In</p>
-      </div>
+          <div className="flex-1 text-xs">
+            <p className="truncate">{session?.user?.name}</p>
+            <p className="text-gray-400">1 Karma</p>
+          </div>
+        </div>
+      ) : (
+        <div
+          onClick={() => signIn()}
+          className="hidden cursor-pointer items-center space-x-2 border border-gray-100 p-2 lg:flex"
+        >
+          <div className="relative h-5 w-5 flex-shrink-0">
+            <Image
+              src={redditLoginIcon}
+              alt="reddit login icon"
+              objectFit="contain"
+              layout="fill"
+            />
+          </div>
+
+          <p className="text-gray-400">Sign In</p>
+        </div>
+      )}
     </div>
   );
 };
