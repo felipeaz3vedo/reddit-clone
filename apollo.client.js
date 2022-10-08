@@ -1,7 +1,10 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: 'https://countries.trevorblades.com',
+  uri: 'https://millstone.stepzen.net/api/jazzy-zorse/__graphql',
+  headers: {
+    Authorization: `Apikey ${process.env.NEXT_PUBLIC_STEPZEN_KEY}`
+  },
   cache: new InMemoryCache()
 });
 

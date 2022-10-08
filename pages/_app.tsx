@@ -3,15 +3,19 @@ import { Session } from 'next-auth';
 import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
 import { Header } from '../components/Header';
+import { ApolloProvider } from '@apollo/client';
+import client from '../apollo.client';
 
 function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
-    <SessionProvider session={pageProps.session}>
-      <div className="h-screen overflow-y-scroll bg-slate-200">
-        <Header />
-        <Component {...pageProps} />
-      </div>
-    </SessionProvider>
+    <ApolloProvider client={client}>
+      <SessionProvider session={pageProps.session}>
+        <div className="h-screen overflow-y-scroll bg-slate-200">
+          <Header />
+          <Component {...pageProps} />
+        </div>
+      </SessionProvider>
+    </ApolloProvider>
   );
 }
 
